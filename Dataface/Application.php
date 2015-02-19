@@ -2133,6 +2133,13 @@ END
 		import('Dataface/PermissionsTool.php');
 		import('Dataface/Table.php');
 		
+		$this->fireEvent('beforeLoadModules');
+		$applicationDelegate = $this->getDelegate();
+		if ( isset($applicationDelegate) and method_exists($applicationDelegate, 'beforeLoadModules') ){
+			// Do whatever we need to do before the modules are loaded.
+			$applicationDelegate->beforeLoadModules();
+		}
+
 		if ( isset($this->_conf['_modules']) and count($this->_conf['_modules']) > 0 ){
 			$mt = Dataface_ModuleTool::getInstance();
 			foreach ($this->_conf['_modules'] as $modname=>$modpath){
@@ -2142,7 +2149,6 @@ END
 		}
 		
 		$this->fireEvent('beforeHandleRequest');
-		$applicationDelegate = $this->getDelegate();
 		if ( isset($applicationDelegate) and method_exists($applicationDelegate, 'beforeHandleRequest') ){
 			// Do whatever we need to do before the request is handled.
 			$applicationDelegate->beforeHandleRequest();
